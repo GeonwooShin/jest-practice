@@ -1,10 +1,12 @@
 import { render, screen } from "@testing-library/react";
 import App from "./App";
 
-test("renders learn react link", () => {
-  render(<App />); // 인수로 제공하는 JSX에 관한 가상 DOM을 생성
-  const linkElement = screen.getByText(/learn react/i); // 생성된 가상돔에는 screen global 객체로 접근
-  expect(linkElement).toBeInTheDocument(); // 단언, 단언은 테스트 성공과 실패의 원인
-  // toBeInTheDocument는 matcher이고, matcher는 단언의 유형이다
-  // matcher에 일치시켜야 테스트가 통과한다.
+test("버튼이 정확한 초기 색상을 가진다.", () => {
+  render(<App />);
+  // button이라는 role을 가지고 텍스트가 Change to Blue인 요소를 가상 DOM에서 찾는다.
+  const colorButton = screen.getByRole("button", { name: "Change to Blue" });
+  // button의 배경 색상이 레드임을 단언한다.
+  expect(colorButton).toHaveStyle({ backgroundColor: "red" });
 });
+
+test("클릭하면 버튼이 파란색으로 변경된다.", () => {});
