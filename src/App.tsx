@@ -1,5 +1,9 @@
 import { useState } from "react";
 
+export function replaceCamelWithSpaces(colorName: string) {
+  return colorName.replace(/\B([A-Z])\B/g, " $1");
+}
+
 const App = () => {
   const [isClicked, setIsCliked] = useState<boolean>(false);
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
@@ -10,18 +14,21 @@ const App = () => {
   return (
     <div>
       <button
-        style={
-          isClicked ? { backgroundColor: "blue" } : { backgroundColor: "red" }
-        }
+        style={{
+          backgroundColor: isDisabled ? "gray" : isClicked ? "blue" : "red",
+        }}
         onClick={handleButton}
         disabled={isDisabled}
       >
         Change to {btnText}
       </button>
-      <input
-        type="checkbox"
-        onChange={(e) => setIsDisabled(e.target.checked)}
-      />
+      <label>
+        <input
+          type="checkbox"
+          onChange={(e) => setIsDisabled(e.target.checked)}
+        />
+        버튼 비활성화
+      </label>
     </div>
   );
 };
