@@ -7,12 +7,24 @@ module.exports = {
   resolve: {
     extensions: [".js", ".jsx", ".ts", ".tsx"],
   },
+  output: {
+    path: path.join(__dirname, "/dist"),
+    filename: "bundle.js",
+  },
   module: {
     rules: [
       {
         test: /\.tsx?$/,
         use: ["babel-loader", "ts-loader"],
         exclude: /node_modules/,
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"],
+      },
+      {
+        test: /\.(png|jpg|gif|svg|eot|ttf|woff|woff2)$/,
+        use: ["url-loader"],
       },
       {
         test: /\.jsx?$/,
@@ -30,10 +42,6 @@ module.exports = {
         ],
       },
     ],
-  },
-  output: {
-    path: path.join(__dirname, "/dist"),
-    filename: "bundle.js",
   },
   plugins: [
     new HtmlWebpackPlugin({
