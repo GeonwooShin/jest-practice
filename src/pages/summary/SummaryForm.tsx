@@ -1,13 +1,19 @@
 import { useState } from "react";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button";
-import { FormGroup } from "react-bootstrap";
+import { FormGroup, Button, Popover, OverlayTrigger } from "react-bootstrap";
 
 const SummaryForm = () => {
   const [isTermChecked, setIsTermChecked] = useState<boolean>(false);
+  const popover = (
+    <Popover>
+      <Popover.Body>아이스크림이 실제로 배달되지는 않습니다.</Popover.Body>
+    </Popover>
+  );
   const checkboxLabel = (
     <span>
-      <span style={{ color: "blue" }}>약관 확인</span>에 동의합니다.
+      <OverlayTrigger placement="right" overlay={popover}>
+        <span style={{ color: "blue" }}>약관 확인에 동의합니다.</span>
+      </OverlayTrigger>
     </span>
   );
   return (
