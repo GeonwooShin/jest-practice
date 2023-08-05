@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen } from "../../../test-utils/testing-library-utils";
 import Options from "../Options";
 
 test("서버에서 전달받은 scoop 옵션에 관한 이미지 출력", async () => {
@@ -28,7 +28,7 @@ test("서버에서 전달받은 topping 옵션에 관한 이미지 출력", asyn
   const altText = toppingImages.map((ele) => ele.alt);
   expect(altText).toEqual([
     "Cherries topping",
-    "M&Ms topping",
+    "MandMs topping",
     "Cookies topping",
     "Jellies topping",
     "Splinkles topping",
