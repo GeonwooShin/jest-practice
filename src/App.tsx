@@ -1,4 +1,14 @@
+import { Container } from "react-bootstrap";
+import OrderEntry from "./pages/entry/OrderEntry";
+import { OrderDetailsProvider } from "./contexts/OrderDetails";
+
 const App = () => {
-  return <div></div>;
+  return (
+    <Container>
+      <OrderDetailsProvider>
+        <OrderEntry />
+      </OrderDetailsProvider>
+    </Container>
+  );
 };
 export default App;
