@@ -17,10 +17,15 @@ const Options = ({ optionType }: { optionType: string }) => {
   const [error, setError] = useState<boolean>(false);
   const { totals } = useOrderDetails();
   useEffect(() => {
+    const controller = new AbortController();
     axios
-      .get(`http://localhost:3030/${optionType}`)
+      .get(`http://localhost:3030/${optionType}`, { signal: controller.signal })
       .then((res) => setItems(res.data))
       .catch(() => setError(true));
+    // 컴포넌트 언마운트시 axios 호출 중단
+    return () => {
+      controller.abort();
+    };
   }, [optionType]);
   if (error) {
     return <AlertBanner />;
