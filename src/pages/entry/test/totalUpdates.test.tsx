@@ -1,6 +1,7 @@
 import { render, screen } from "../../../test-utils/testing-library-utils";
 import userEvent from "@testing-library/user-event";
 import Options from "../Options";
+import OrderEntry from "../OrderEntry";
 
 test("스쿱 옵션이 변경되면 스쿱에 해당하는 소계 업데이트", async () => {
   const user = userEvent.setup();
@@ -52,4 +53,72 @@ test("토핑 옵션이 변경되면 토핑에 해당하는 소계 업데이트",
   expect(cherriesCheckbox).toBeChecked();
   await user.click(cherriesCheckbox);
   expect(toppingsSubtotal).toHaveTextContent("1500");
+});
+
+describe("총 합계 확인", () => {
+  test("총 합계가 0원으로 시작", () => {
+    const { unmount } = render(<OrderEntry />);
+    const total = screen.getByRole("heading", { name: /총 합계: / });
+    expect(total).toHaveTextContent("0");
+    unmount();
+  });
+  test("스쿱 먼저 추가 시 총 합계가 정상적으로 업데이트", async () => {
+    const user = userEvent.setup();
+    render(<OrderEntry />);
+    const total = screen.getByRole("heading", { name: /총 합계: / });
+    // 바닐라 스쿱 두개 추가
+    const vanillaInput = await screen.findByRole("spinbutton", {
+      name: "Vanilla",
+    });
+    await user.clear(vanillaInput);
+    await user.type(vanillaInput, "2");
+    expect(total).toHaveTextContent("4000");
+    // 체리 토핑 추가
+    const cherriesCheckbox = await screen.findByRole("checkbox", {
+      name: "Cherries",
+    });
+    await user.click(cherriesCheckbox);
+    expect(total).toHaveTextContent("5500");
+  });
+  test("토핑 먼저 추가 시 총 합계가 정상적으로 업데이트", async () => {
+    const user = userEvent.setup();
+    render(<OrderEntry />);
+    const total = screen.getByRole("heading", { name: /총 합계: / });
+    // 체리 토핑 추가
+    const cherriesCheckbox = await screen.findByRole("checkbox", {
+      name: "Cherries",
+    });
+    await user.click(cherriesCheckbox);
+    expect(total).toHaveTextContent("1500");
+    // 딸기 스쿱 세개 추가
+    const strawberryInput = await screen.findByRole("spinbutton", {
+      name: "Strawberry",
+    });
+    await user.clear(strawberryInput);
+    await user.type(strawberryInput, "3");
+    expect(total).toHaveTextContent("7500");
+  });
+  test("토핑 또는 스쿱 제거 시 총 합계가 정상적으로 업데이트", async () => {
+    const user = userEvent.setup();
+    render(<OrderEntry />);
+    const total = screen.getByRole("heading", { name: /총 합계: / });
+    // 체리 토핑 추가
+    const cherriesCheckbox = await screen.findByRole("checkbox", {
+      name: "Cherries",
+    });
+    await user.click(cherriesCheckbox);
+    // 바닐라 스쿱 3개 추가
+    const vanillaInput = await screen.findByRole("spinbutton", {
+      name: "Vanilla",
+    });
+    await user.clear(vanillaInput);
+    await user.type(vanillaInput, "3");
+    // 바닐라 스쿱 2개 제거
+    await user.clear(vanillaInput);
+    await user.type(vanillaInput, "1");
+    expect(total).toHaveTextContent("3500");
+    // 체리 토핑 제거
+    await user.click(cherriesCheckbox);
+    expect(total).toHaveTextContent("2000");
+  });
 });
