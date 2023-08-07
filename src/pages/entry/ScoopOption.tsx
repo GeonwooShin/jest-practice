@@ -1,9 +1,15 @@
 import { Col, Form, Row } from "react-bootstrap";
 import { useOrderDetails } from "../../contexts/OrderDetails";
 
-const ScoopOption = ({ name, imagePath }) => {
+const ScoopOption = ({
+  name,
+  imagePath,
+}: {
+  name: string;
+  imagePath: string;
+}) => {
   const { updateItemCount } = useOrderDetails();
-  const handleChange = (e) =>
+  const handleChange = (e: any) =>
     updateItemCount(name, parseInt(e.target.value), "scoops");
   return (
     <Col xs={12} sm={6} md={4} lg={3} style={{ textAlign: "center" }}>

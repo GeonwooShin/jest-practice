@@ -1,9 +1,15 @@
 import { Col, FormGroup, Form } from "react-bootstrap";
 import { useOrderDetails } from "../../contexts/OrderDetails";
 
-const ToppingOption = ({ name, imagePath }) => {
+const ToppingOption = ({
+  name,
+  imagePath,
+}: {
+  name: string;
+  imagePath: string;
+}) => {
   const { updateItemCount } = useOrderDetails();
-  const handleChange = (e) => {
+  const handleChange = (e: any) => {
     updateItemCount(name, e.target.checked ? 1 : 0, "toppings");
   };
   return (
