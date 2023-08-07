@@ -16,7 +16,7 @@ test("스쿱과 토핑 컴포넌트 에러 처리", async () => {
       res(ctx.status(500))
     )
   );
-  render(<OrderEntry />);
+  render(<OrderEntry setOrderPhase={jest.fn()} />);
   // 컴퓨터 속도에 따라 오류가 발생할 수 있다.
   // 경합 조건에 따라 단언문 실행전 두 네트워크 호출이 모두 반환되면 에러가 발생하지 않는다.
   // 하지만 하나의 네트워크 호출만 반환되었을 때 단언문이 실행되면 에러가 발생할 수 있다.

@@ -57,14 +57,14 @@ test("토핑 옵션이 변경되면 토핑에 해당하는 소계 업데이트",
 
 describe("총 합계 확인", () => {
   test("총 합계가 0원으로 시작", () => {
-    const { unmount } = render(<OrderEntry />);
+    const { unmount } = render(<OrderEntry setOrderPhase={jest.fn()} />);
     const total = screen.getByRole("heading", { name: /총 합계: / });
     expect(total).toHaveTextContent("0");
     unmount();
   });
   test("스쿱 먼저 추가 시 총 합계가 정상적으로 업데이트", async () => {
     const user = userEvent.setup();
-    render(<OrderEntry />);
+    render(<OrderEntry setOrderPhase={jest.fn()} />);
     const total = screen.getByRole("heading", { name: /총 합계: / });
     // 바닐라 스쿱 두개 추가
     const vanillaInput = await screen.findByRole("spinbutton", {
@@ -82,7 +82,7 @@ describe("총 합계 확인", () => {
   });
   test("토핑 먼저 추가 시 총 합계가 정상적으로 업데이트", async () => {
     const user = userEvent.setup();
-    render(<OrderEntry />);
+    render(<OrderEntry setOrderPhase={jest.fn()} />);
     const total = screen.getByRole("heading", { name: /총 합계: / });
     // 체리 토핑 추가
     const cherriesCheckbox = await screen.findByRole("checkbox", {
@@ -100,7 +100,7 @@ describe("총 합계 확인", () => {
   });
   test("토핑 또는 스쿱 제거 시 총 합계가 정상적으로 업데이트", async () => {
     const user = userEvent.setup();
-    render(<OrderEntry />);
+    render(<OrderEntry setOrderPhase={jest.fn()} />);
     const total = screen.getByRole("heading", { name: /총 합계: / });
     // 체리 토핑 추가
     const cherriesCheckbox = await screen.findByRole("checkbox", {
