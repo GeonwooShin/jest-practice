@@ -1,9 +1,18 @@
 import { useState } from "react";
 import Form from "react-bootstrap/Form";
 import { FormGroup, Button, Popover, OverlayTrigger } from "react-bootstrap";
+import { Dispatch, SetStateAction } from "react";
 
-const SummaryForm = () => {
+const SummaryForm = ({
+  setOrderPhase,
+}: {
+  setOrderPhase: Dispatch<SetStateAction<string>>;
+}) => {
   const [isTermChecked, setIsTermChecked] = useState<boolean>(false);
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    setOrderPhase("completed");
+  };
   const popover = (
     <Popover>
       <Popover.Body>아이스크림이 실제로 배달되지는 않습니다.</Popover.Body>
@@ -17,7 +26,7 @@ const SummaryForm = () => {
     </span>
   );
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <FormGroup controlId="terms-and-conditions">
         <Form.Check
           type="checkbox"

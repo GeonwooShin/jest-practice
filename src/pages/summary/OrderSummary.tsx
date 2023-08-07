@@ -1,10 +1,15 @@
 import SummaryForm from "./SummaryForm";
-import { useOrderDetails } from "src/contexts/OrderDetails";
+import { useOrderDetails } from "../../../src/contexts/OrderDetails";
+import { Dispatch, SetStateAction } from "react";
 
-const OrderSummary = () => {
+const OrderSummary = ({
+  setOrderPhase,
+}: {
+  setOrderPhase: Dispatch<SetStateAction<string>>;
+}) => {
   const { totals, optionCounts } = useOrderDetails();
-  const scoopArr = Object.entries(optionCounts["scoops"]);
-  const scoopList = scoopArr.map(([key, value]) => (
+  const scoopArr = Object.entries(optionCounts.scoops);
+  const scoopList = scoopArr.map(([key, value]: any) => (
     <li key={key}>
       {value} {key}
     </li>
@@ -18,7 +23,7 @@ const OrderSummary = () => {
       <ul>{scoopList}</ul>
       <h2>Toppings: {totals.toppings}</h2>
       <ul>{toppingList}</ul>
-      <SummaryForm />
+      <SummaryForm setOrderPhase={setOrderPhase} />
     </div>
   );
 };
