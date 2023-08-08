@@ -19,10 +19,16 @@ const OrderSummary = ({
   return (
     <div>
       <h1>주문 요약</h1>
-      <h2>Scoops: {totals.scoops}</h2>
+      <h2>스쿱 소계: {totals.scoops}</h2>
       <ul>{scoopList}</ul>
-      <h2>Toppings: {totals.toppings}</h2>
-      <ul>{toppingList}</ul>
+      {totals.toppings > 0 ? (
+        <>
+          <h2>토핑 소계: {totals.toppings}</h2>
+          <ul>{toppingList}</ul>
+        </>
+      ) : (
+        <></>
+      )}
       <SummaryForm setOrderPhase={setOrderPhase} />
     </div>
   );
