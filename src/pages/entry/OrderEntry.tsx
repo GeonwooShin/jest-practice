@@ -17,7 +17,12 @@ const OrderEntry = ({
       <Options optionType="scoops" />
       <Options optionType="toppings" />
       <h2>총 합계: {totals.scoops + totals.toppings}</h2>
-      <Button onClick={handleClick}>주문</Button>
+      <Button
+        disabled={totals.scoops === 0 ? true : false}
+        onClick={handleClick}
+      >
+        주문
+      </Button>
     </div>
   );
 };
