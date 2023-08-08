@@ -2,6 +2,7 @@ import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useOrderDetails } from "../../../src/contexts/OrderDetails";
 import axios from "axios";
 import { Button } from "react-bootstrap";
+import AlertBanner from "../common/AlertBanner";
 
 const OrderConfirmation = ({
   setOrderPhase,
@@ -9,6 +10,7 @@ const OrderConfirmation = ({
   setOrderPhase: Dispatch<SetStateAction<string>>;
 }) => {
   const [orderNumber, setOrderNumber] = useState<number | null>(null);
+  const [error, setError] = useState<boolean>(false);
   const { resetOrder } = useOrderDetails();
   useEffect(() => {
     axios
@@ -16,12 +18,20 @@ const OrderConfirmation = ({
       .then((response) => {
         setOrderNumber(response.data.orderNumber);
       })
-      .catch((error) => {});
+      .catch(() => setError(true));
   }, []);
   const handleClick = () => {
     resetOrder();
     setOrderPhase("inProgress");
   };
+  if (error) {
+    return (
+      <>
+        <AlertBanner />
+        <Button onClick={handleClick}>새 주문</Button>
+      </>
+    );
+  }
   if (orderNumber) {
     return (
       <div style={{ textAlign: "center" }}>
