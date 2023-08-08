@@ -1,4 +1,9 @@
-import { render, screen } from "../../../test-utils/testing-library-utils";
+import userEvent from "@testing-library/user-event";
+import {
+  logRoles,
+  render,
+  screen,
+} from "../../../test-utils/testing-library-utils";
 import Options from "../Options";
 
 test("서버에서 전달받은 scoop 옵션에 관한 이미지 출력", async () => {
@@ -33,4 +38,26 @@ test("서버에서 전달받은 topping 옵션에 관한 이미지 출력", asyn
     "Jellies topping",
     "Splinkles topping",
   ]);
+});
+
+test("유효하지 않은 스쿱 값에 대해 소계 업데이트 차단", async () => {
+  const user = userEvent.setup();
+  const { container } = render(<Options optionType="scoops" />);
+  // 유효하지 않은 값 입력
+  const vanillaInput = await screen.findByRole("spinbutton", {
+    name: "Vanilla",
+  });
+  const scoopsTotal = screen.getByText("Scoops 총", { exact: false });
+
+  await user.clear(vanillaInput);
+  await user.type(vanillaInput, "14");
+  expect(scoopsTotal).toHaveTextContent("Scoops 총: 0원");
+
+  await user.clear(vanillaInput);
+  await user.type(vanillaInput, "-3");
+  expect(scoopsTotal).toHaveTextContent("Scoops 총: 0원");
+
+  await user.clear(vanillaInput);
+  await user.type(vanillaInput, "2.5");
+  expect(scoopsTotal).toHaveTextContent("Scoops 총: 0원");
 });
