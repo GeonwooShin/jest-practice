@@ -6,6 +6,7 @@ import {
 import OrderEntry from "../OrderEntry";
 import { rest } from "msw";
 import { server } from "../../../mocks/server";
+import userEvent from "@testing-library/user-event";
 
 test("스쿱과 토핑 컴포넌트 에러 처리", async () => {
   server.resetHandlers(
@@ -27,4 +28,23 @@ test("스쿱과 토핑 컴포넌트 에러 처리", async () => {
     const alerts = await screen.findAllByRole("alert");
     expect(alerts).toHaveLength(2);
   });
+});
+
+test("주문한 스쿱이 없으면 주문 버튼 비활성화", async () => {
+  const user = userEvent.setup();
+  render(<OrderEntry setOrderPhase={jest.fn()} />);
+  // 초기 주문 버튼 비활성화
+  const orderButton = screen.getByRole("button", { name: "주문" });
+  expect(orderButton).toBeDisabled();
+  // 스쿱 추가한 경우 주문 버튼 활성화
+  const strawberryInput = await screen.findByRole("spinbutton", {
+    name: "Strawberry",
+  });
+  await user.clear(strawberryInput);
+  await user.type(strawberryInput, "1");
+  expect(orderButton).toBeEnabled();
+  // 추가한 스쿱 다시 제거한 경우 주문 버튼 비활성화
+  await user.clear(strawberryInput);
+  await user.type(strawberryInput, "0");
+  expect(orderButton).toBeDisabled();
 });
